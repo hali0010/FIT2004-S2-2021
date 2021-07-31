@@ -48,17 +48,29 @@ def num_rad_sort(num_list, b):  # takes a numerical list and base as parameters 
 
 # Task 2 Timing bases
 def base_timer(num_list,base_list):
-    time_taken = [0] * 20
-    base = [0] * 20
-    for j in range(0, 20):
-        base[j] = 2 ** (j + 1)
+    n = len(base_list)
+    time_taken = [0] * n
+    for i in range(0, n):
         time_start = time.time()
-        num_rad_sort(num_list, base[j])
+        num_rad_sort(num_list, base_list[i])
         time_stop = time.time()
-        time_taken[j] = time_stop - time_start
-    out = [(base[i], time_taken[i]) for i in range(0, 20)]
+        time_taken[i] = time_stop - time_start
+    out = [(base_list[i], time_taken[i]) for i in range(0, n)]
     return out
 
+random.seed("FIT2004S22021")
+data1 = [random.randint(0,2**25) for _ in range(2**15)]
+data2 = [random.randint(0,2**25) for _ in range(2**16)]
+bases1 = [2**i for i in range(1,23)]
+bases2 = [2*10**6 + (5*10**5)*i for i in range(1,10)]
+y1 = base_timer(data1, bases1)
+y2 = base_timer(data2, bases1)
+y3 = base_timer(data1, bases2)
+y4 = base_timer(data2, bases2)
+print(y1)
+print(y2)
+print(y3)
+print(y4)
 nums = [43, 101, 22, 27, 5, 50, 15]
 print(num_rad_sort(nums, 4))
 
