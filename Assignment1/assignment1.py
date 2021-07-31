@@ -46,8 +46,8 @@ def num_rad_sort(num_list, b):  # takes a numerical list and base as parameters 
     return num_list
 
 
-# Task 2 Optimizing radix sort
-def test_bases(num_list):
+# Task 2 Timing bases
+def base_timer(num_list,base_list):
     time_taken = [0] * 20
     base = [0] * 20
     for j in range(0, 20):
@@ -61,3 +61,5 @@ def test_bases(num_list):
 
 nums = [43, 101, 22, 27, 5, 50, 15]
 print(num_rad_sort(nums, 4))
+
+
