@@ -1,3 +1,5 @@
+#Student name: Haider Ali
+#Student ID: 31371337
 import time
 import random
 
