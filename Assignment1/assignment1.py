@@ -102,7 +102,7 @@ def countSort_letters(word_list, size, column, base, maximum_wlen):
 def radixSort_letters(word_list):  # same complexity as numerical radix sort
     maximum_column = len(max(word_list, key=len,default=[" "]))  # finds out the max letters of words in the word list
     for column in range(maximum_column - 1, -1, -1):
-        word_list = countSort_letters(word_list, len(word_list), column, 27, maximum_column)
+        word_list = countSort_letters(word_list, len(word_list), column, 27, maximum_column) # handling space as well thats why need to take the base as 27 to allot a digit for space.
 
     return word_list
 
@@ -142,8 +142,7 @@ def interest_groups(data):  # takes data as parameters. contains the names and e
     for i in range(0,len(list2)):
         for j in range(0, len(namelist)):
             if checklist[i] == list_to_store[j]:  # checks for anagarams
-                output[i] = output[i]+[namelist[j]]  #adds the sorted word to the output list if anagaram is foun. runs in
-                # O(nxw) where n is the number of elements in char_set_list and w is the number of words in word_list
+                output[i] = output[i]+[namelist[j]]  #adds the name to the output list if more than one name have same interest group. 
 
     return output
 
