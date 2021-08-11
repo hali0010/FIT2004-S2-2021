@@ -106,23 +106,26 @@ def radixSort_letters(word_list):  # same complexity as numerical radix sort
 
     return word_list
 
-def binary_search(list1, n):  
-    low = 0  
-    high = len(list1) - 1  
-    mid = 0  
-  
-    while low <= high:   
-        mid = (high + low) // 2  
-    
-        if list1[mid] < n:  
-            low = mid + 1  
-   
-        elif list1[mid] > n:  
-            high = mid - 1  
-        else:  
-            return mid  
-    return -1  
+def binary_search(arr, x):
+    l = 0
+    r = len(arr)
+    while (l <= r):
+        m = l + ((r - l) // 2)
+        res = (x == arr[m])
 
+            # Check if x is present at mid
+        if (res == 0):
+            return m - 1
+ 
+        # If x greater, ignore left half
+        if (res > 0):
+            l = m + 1
+ 
+        # If x is smaller, ignore right half
+        else:
+           r = m - 1
+ 
+    return -1
 
 def words_with_anagrams(list1, list2):  # takes list1 and list2 as parameters. list1 contains the words which we have to check and list2 is used to check for what anagarams can be made in word_list.
     checklist = [[]] * len(list2)   # new list for deconstructing list2 into characters
@@ -150,7 +153,6 @@ def interest_groups(data):  # takes data as parameters. contains the names and e
 #    checklist = [[]] * len(list2)   # new list for deconstructing set of liked things into characters
     output = [[ ] * len(namelist)] * len(list2)  # list to output the result
     pos = -1
-    i = 0
 #    for i in range(0, len(list2)):
 #        checklist[i] = list(radixSort_letters(list2[i]))  # deconstructs each distinct thing into its characters
     
@@ -159,7 +161,7 @@ def interest_groups(data):  # takes data as parameters. contains the names and e
         pos = binary_search(list2,list2[i])
         if pos!=-1:
             output[i] = output[i]+[namelist[pos]]
-            
+        pos = -1
     
 #    for i in range(0,len(list2)):
 #        for j in range(0, len(namelist)):
