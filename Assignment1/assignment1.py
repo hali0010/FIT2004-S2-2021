@@ -106,6 +106,23 @@ def radixSort_letters(word_list):  # same complexity as numerical radix sort
 
     return word_list
 
+def binary_search(list1, n):  
+    low = 0  
+    high = len(list1) - 1  
+    mid = 0  
+  
+    while low <= high:   
+        mid = (high + low) // 2  
+    
+        if list1[mid] < n:  
+            low = mid + 1  
+   
+        elif list1[mid] > n:  
+            high = mid - 1  
+        else:  
+            return mid  
+    return -1  
+
 
 def words_with_anagrams(list1, list2):  # takes list1 and list2 as parameters. list1 contains the words which we have to check and list2 is used to check for what anagarams can be made in word_list.
     checklist = [[]] * len(list2)   # new list for deconstructing list2 into characters
@@ -130,20 +147,25 @@ def words_with_anagrams(list1, list2):  # takes list1 and list2 as parameters. l
 def interest_groups(data):  # takes data as parameters. contains the names and each distinct set of liked things 
     namelist = [ i for i, j in data ]  # the list that contains the names of the people
     list2 = [ j for i, j in data ]  # the list that contains the distinct set of liked things
-#   sorted_names = radixSort_letters(list1)  # sorts namelist into alphabetical order
-    checklist = [[]] * len(list2)   # new list for deconstructing set of liked things into characters
-    list_to_store = [[]] * len(namelist)  # new list to store the deconstructed words in the names of people
+#    checklist = [[]] * len(list2)   # new list for deconstructing set of liked things into characters
     output = [[ ] * len(namelist)] * len(list2)  # list to output the result
-    for i in range(0,len(namelist)):
-        list_to_store[i] = list(radixSort_letters(namelist[i]))  # deconstructs each name into its characters
-    for i in range(0, len(list2)):
-        checklist[i] = list(radixSort_letters(list2[i]))  # deconstructs each distinct thing into its characters
-
-    for i in range(0,len(list2)):
-        for j in range(0, len(namelist)):
-            if checklist[i] == list_to_store[j]:  # checks for anagarams
-                output[i] = output[i]+[namelist[j]]  #adds the name to the output list if more than one name have same interest group. 
-
+    pos = -1
+    i = 0
+#    for i in range(0, len(list2)):
+#        checklist[i] = list(radixSort_letters(list2[i]))  # deconstructs each distinct thing into its characters
+    
+    i = 0 
+    for i in range(0, len(namelist)) :
+        pos = binary_search(list2,list2[i])
+        if pos!=-1:
+            output[i] = output[i]+[namelist[pos]]
+            
+    
+#    for i in range(0,len(list2)):
+#        for j in range(0, len(namelist)):
+#            if checklist[i] == checklist[j]:  # checks for anagarams
+#                output[i] = output[i]+[namelist[j]]  #adds the name to the output list if more than one name have same interest group. 
+              
     return output
 
 
