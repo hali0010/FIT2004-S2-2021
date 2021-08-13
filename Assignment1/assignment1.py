@@ -49,7 +49,7 @@ def num_rad_sort(num_list, b):  # takes a numerical list and base as parameters 
 
 
 # Task 2 Timing bases
-def base_timer(num_list,base_list):
+def base_timer(num_list,base_list): 
     n = len(base_list)
     time_taken = [0] * n
     for i in range(0, n):
@@ -75,7 +75,7 @@ def base_timer(num_list,base_list):
 # print(y4)
 
 # Task 3 Interest Groups
-def countSort_letters(word_list, size, column, base, maximum_wlen):
+def countSort_letters(word_list, size, column, base, maximum_wlen): # time complexity O(n+b) same as count sort for numbers
     output = [0] * size
     character_count = [0] * (base + 1)
     minimum_base = ord('a')
@@ -106,7 +106,7 @@ def radixSort_letters(word_list):  # same complexity as numerical radix sort
 
     return word_list
 
-def binary_search(array, element): # runs in O(log(n)) where n is the number of elements in the array0
+def binary_search(array, element): # runs in O(log(n)) where n is the number of elements in the array. Takes an array and the element to find as parameters
     mid = 0
     start = 0
     end = len(array) -1
@@ -146,12 +146,12 @@ def interest_groups(data):  # takes data as parameters. contains the names and e
             else:
                 output[i] = [namepop]
             pos = - 1
-            
+
     for j in range(len(output)-1,-1,-1): # cleans up the empty [] at the end
         if output[j] == []:
             output.pop(j)
 
-    return output
+    return output # time complexity approximately O(N*log(M)) where N is the number of elements in the data (the number of people) and M is the length of the longest string in set
 
 
 data = [("nuka", ["birds", "napping"]),
