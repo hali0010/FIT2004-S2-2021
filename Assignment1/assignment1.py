@@ -106,68 +106,51 @@ def radixSort_letters(word_list):  # same complexity as numerical radix sort
 
     return word_list
 
-def binary_search(arr, x):
-    l = 0
-    r = len(arr)
-    while (l <= r):
-        m = l + ((r - l) // 2)
-        res = (x == arr[m])
+def binary_search(array, element): # runs in O(log(n)) where n is the number of elements in the array0
+    mid = 0
+    start = 0
+    end = len(array) -1
 
-            # Check if x is present at mid
-        if (res == 0):
-            return m - 1
- 
-        # If x greater, ignore left half
-        if (res > 0):
-            l = m + 1
- 
-        # If x is smaller, ignore right half
+    while (start <= end):
+        mid = (start + end +1 ) // 2
+
+        if element == array[mid]:
+            return mid
+
+        if element < array[mid]:
+            end = mid - 1
         else:
-           r = m - 1
- 
+            start = mid + 1
     return -1
-
-def words_with_anagrams(list1, list2):  # takes list1 and list2 as parameters. list1 contains the words which we have to check and list2 is used to check for what anagarams can be made in word_list.
-    checklist = [[]] * len(list2)   # new list for deconstructing list2 into characters
-    list_to_store = [[]] * len(list1)  # new list to store the deconstructed words in list1
-    output = [] * len(list1)  # list to output the result
-    count = [0] * len(list1) # something nifty to store which words in list 1 have anagrams in list 2
-    for i in range(0,len(list1)):
-        list_to_store[i] = list(radixSort_letters(list1[i]))  # deconstructs each sorted word into its characters 
-        #runs in O(nlog(M)) where n is the number of words in the list. M is the largest value of the character in alphabet among the words
-    for i in range(0, len(list2)):
-        checklist[i] = list(radixSort_letters(list2[i]))  # deconstructs each list2 word into its characters
-
-    for i in range(0,len(list2)):
-        for j in range(0, len(list1)):
-            if list_to_store[j] == checklist[i]:  # checks for anagrams O(comp(length of longest word in list1 and list 2))
-                count[j] = 1
-    for j in range(0, len(list1)):
-            if count[j] == 1:
-                output += [list1[j]]
-    return output
 
 def interest_groups(data):  # takes data as parameters. contains the names and each distinct set of liked things 
     namelist = [ i for i, j in data ]  # the list that contains the names of the people
     list2 = [ j for i, j in data ]  # the list that contains the distinct set of liked things
-#    checklist = [[]] * len(list2)   # new list for deconstructing set of liked things into characters
     output = [[ ] * len(namelist)] * len(list2)  # list to output the result
-    pos = -1
-#    for i in range(0, len(list2)):
-#        checklist[i] = list(radixSort_letters(list2[i]))  # deconstructs each distinct thing into its characters
-    
-    i = 0 
-    for i in range(0, len(namelist)) :
-        pos = binary_search(list2,list2[i])
-        if pos!=-1:
-            output[i] = output[i]+[namelist[pos]]
-        pos = -1
-    
-#    for i in range(0,len(list2)):
-#        for j in range(0, len(namelist)):
-#            if checklist[i] == checklist[j]:  # checks for anagarams
-#                output[i] = output[i]+[namelist[j]]  #adds the name to the output list if more than one name have same interest group. 
-              
+    checklist = [[]] * len(list2)   # new list for deconstructing list2 into characters
+    pos = -1  
+    for i in range(0, len(list2)):
+        checklist[i] = list(radixSort_letters(list2[i]))  # deconstructs each list2 word into its characters
+    i = 0
+
+    for i in range(0,len(namelist)):
+        if len(namelist)!=0:
+            obj = checklist.pop(0)
+            namepop = namelist.pop(0)
+            pos = binary_search(checklist,obj)
+            if pos!=-1 :  # checks for similiar distinct set of liked things
+                output[i] = [namepop] + [namelist.pop(pos)]  #adds the name to the output list if more than one name have same interest group. 
+                output[i]= radixSort_letters(output[i])
+                checklist.pop(pos)
+
+            else:
+                output[i] = [namepop]
+            pos = - 1
+            
+    for j in range(len(output)-1,-1,-1): # cleans up the empty [] at the end
+        if output[j] == []:
+            output.pop(j)
+
     return output
 
 
