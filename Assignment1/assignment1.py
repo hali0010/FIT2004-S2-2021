@@ -3,7 +3,6 @@
 import time
 import random
 
-
 # Task 1 Integer radix sort
 
 def countSort(num_list, exp, b):  # Takes a number list, an exponent and base as parameters where num_list is the array, exp is the exponent and b is the base. Time complexity is O(n+b) where n is the number of elements in the list and
@@ -106,31 +105,89 @@ def radixSort_letters(word_list):  # same complexity as numerical radix sort
 
     return word_list
 
-def binary_search(array, element): # runs in O(log(n)) where n is the number of elements in the array. Takes an array and the element to find as parameters
+def countSort_letters_aux(word_list, size, column, base, maximum_wlen): # time complexity O(n+b) same as count sort for numbers
+    output = [0] * size
+    character_count = [0] * (base + 1)
+    minimum_base = ord('a')
+
+    for words in word_list:
+        character = ord(words[column]) - minimum_base if column < len(words) else 0
+        if character == -65 : # checks if there is a space
+            character = 29    # if there is a space then saved it as the last character
+        character_count[character] += 1
+
+    for letter in range(len(character_count) - 1):
+        character_count[letter + 1] += character_count[letter]
+
+    for words in reversed(word_list):
+        character = ord(words[column]) - minimum_base if column < len(words) else 0
+        if character == -65 : # checks if there is a space that needs to be added
+            character = 29
+        output[character_count[character] - 1] = words
+        character_count[character] -= 1
+
+    return output
+
+def radixSort_letters_aux(word_list):  # same complexity as numerical radix sort
+    maximum_column = len(max(word_list, key=len,default=[" "]))  # finds out the max letters of words in the word list
+    for column in range(maximum_column - 1, -1, -1):
+        word_list = countSort_letters(word_list, len(word_list), column, 29, maximum_column) # handling space and delimiter as well thats why need to take the base as 29.
+    return word_list
+
+
+def radixSort_lettersListOfLists(data):  
+    namelist = [ i for i, j in data ]  # the list that contains the names of the people
+    checklist = [ j for i, j in data ]  # the list that contains the distinct set of liked things
+    list2 = [ j for i, j in data ]  # the duplicate list that contains the distinct set of liked things
+    for i in range(0, len(list2)):
+        checklist[i] = list(radixSort_letters(list2[i]))  # deconstructs each list2 word into its characters and sorts them alphabetically
+    str1 = [[]] * len(checklist)
+    for i in range(0,len(checklist)):
+        str1[i] = '{'.join(checklist[i])+'}'+namelist[i] # turns the list of distinct things to a single word joined by '{' and then adds a '}' and the name
+    str1 = radixSort_letters_aux(str1)
+    for j in range(0,len(str1)):
+        line = str1[j]
+        temp = line.split('}')
+        namelist[j] = temp[1]
+        checklist[j] = temp[0].split('{')
+    data2 = list(zip(namelist, checklist))
+    return data2
+
+
+def binary_search(arr, x):
+    low = 0
+    high = len(arr) - 1
     mid = 0
-    start = 0
-    end = len(array) -1
-
-    while (start <= end):
-        mid = (start + end +1 ) // 2
-
-        if element == array[mid]:
+    if (len(arr)!=0):
+        if (arr[mid]==x):
             return mid
-
-        if element < array[mid]:
-            end = mid - 1
+    while low <= high:
+ 
+        mid = (high + low +1 ) // 2
+ 
+        # If x is greater, ignore left half
+        if arr[mid] < x:
+            low = mid + 1
+ 
+        # If x is smaller, ignore right half
+        elif arr[mid] > x:
+            high = mid - 1
+ 
+        # means x is present at mid
         else:
-            start = mid + 1
+            return mid
+ 
+    # If we reach here, then the element was not present
     return -1
+ 
+
 
 def interest_groups(data):  # takes data as parameters. contains the names and each distinct set of liked things 
-    namelist = [ i for i, j in data ]  # the list that contains the names of the people
-    list2 = [ j for i, j in data ]  # the list that contains the distinct set of liked things
-    output = [[ ] * len(namelist)] * len(list2)  # list to output the result
-    checklist = [[]] * len(list2)   # new list for deconstructing list2 into characters
     pos = -1  
-    for i in range(0, len(list2)):
-        checklist[i] = list(radixSort_letters(list2[i]))  # deconstructs each list2 word into its characters
+    data3 = radixSort_lettersListOfLists(data)
+    namelist = [ i for i, j in data3 ]  # the list that contains the names of the people
+    checklist = [ j for i, j in data3 ]  # the list that contains the distinct set of liked things
+    output = [[ ] * len(namelist)] * len(checklist)  # list to output the result
     i = 0
     n = len(namelist)
     while i < n:
@@ -138,14 +195,12 @@ def interest_groups(data):  # takes data as parameters. contains the names and e
             obj = checklist.pop(0)
             namepop = namelist.pop(0)
             pos = binary_search(checklist,obj)
-            if pos ==-1:
-                output[i] = [namepop]
+            output[i] = [namepop]
             while (pos!=-1)&(len(checklist)>=1) :  # checks for similiar distinct set of liked things
-                output[i] = [namepop] + [namelist.pop(pos)]  #adds the name to the output list if more than one name have same interest group. 
+                output[i] = output[i]+ [namelist.pop(pos)]  #adds the name to the output list if more than one name have same interest group. 
                 output[i]= radixSort_letters(output[i])
                 checklist.pop(pos)
-                pos = binary_search(checklist,obj)
-   
+                pos = binary_search(checklist,obj)   
         i=i + 1
 
     for j in range(len(output)-1,-1,-1): # cleans up the empty [] at the end
@@ -154,12 +209,3 @@ def interest_groups(data):  # takes data as parameters. contains the names and e
 
     return output # time complexity approximately O(N*log(M)) where N is the number of elements in the data (the number of people) and M is the length of the longest string in set
 
-
-#data = [("nuka", ["birds", "napping"]),
-#("hadley", ["napping birds", "nash equilibria"]),
-#("yaffe", ["rainy evenings", "the colour red", "birds"]),
-#("laurie", ["napping", "birds"]),
-#("kamalani", ["birds", "rainy evenings", "the colour red"])]
-
-
-#print(interest_groups(data))
