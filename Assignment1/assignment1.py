@@ -154,7 +154,7 @@ def radixSort_lettersListOfLists(data):
     return data2
 
 
-def binary_search(arr, x):
+def binary_search(arr, x): # runs in O(logn) where n is the number of elements in arr
     low = 0
     high = len(arr) - 1
     mid = 0
