@@ -132,20 +132,21 @@ def interest_groups(data):  # takes data as parameters. contains the names and e
     for i in range(0, len(list2)):
         checklist[i] = list(radixSort_letters(list2[i]))  # deconstructs each list2 word into its characters
     i = 0
-
-    for i in range(0,len(namelist)):
+    n = len(namelist)
+    while i < n:
         if len(namelist)!=0:
             obj = checklist.pop(0)
             namepop = namelist.pop(0)
             pos = binary_search(checklist,obj)
-            if pos!=-1 :  # checks for similiar distinct set of liked things
+            if pos ==-1:
+                output[i] = [namepop]
+            while (pos!=-1)&(len(checklist)>=1) :  # checks for similiar distinct set of liked things
                 output[i] = [namepop] + [namelist.pop(pos)]  #adds the name to the output list if more than one name have same interest group. 
                 output[i]= radixSort_letters(output[i])
                 checklist.pop(pos)
-
-            else:
-                output[i] = [namepop]
-            pos = - 1
+                pos = binary_search(checklist,obj)
+   
+        i=i + 1
 
     for j in range(len(output)-1,-1,-1): # cleans up the empty [] at the end
         if output[j] == []:
@@ -154,11 +155,11 @@ def interest_groups(data):  # takes data as parameters. contains the names and e
     return output # time complexity approximately O(N*log(M)) where N is the number of elements in the data (the number of people) and M is the length of the longest string in set
 
 
-data = [("nuka", ["birds", "napping"]),
-("hadley", ["napping birds", "nash equilibria"]),
-("yaffe", ["rainy evenings", "the colour red", "birds"]),
-("laurie", ["napping", "birds"]),
-("kamalani", ["birds", "rainy evenings", "the colour red"])]
+#data = [("nuka", ["birds", "napping"]),
+#("hadley", ["napping birds", "nash equilibria"]),
+#("yaffe", ["rainy evenings", "the colour red", "birds"]),
+#("laurie", ["napping", "birds"]),
+#("kamalani", ["birds", "rainy evenings", "the colour red"])]
 
 
-print(interest_groups(data))
+#print(interest_groups(data))
