@@ -140,7 +140,7 @@ def radixSort_lettersListOfLists(data):
     checklist = [ j for i, j in data ]  # the list that contains the distinct set of liked things
     list2 = [ j for i, j in data ]  # the duplicate list that contains the distinct set of liked things
     for i in range(0, len(list2)):
-        checklist[i] = list(radixSort_letters(list2[i]))  # deconstructs each list2 word into its characters and sorts them alphabetically
+        checklist[i] = list(radixSort_letters(list2[i]))  # deconstructs each distinct set of words into its words and sorts each of the distinct list alphabetically
     str1 = [[]] * len(checklist)
     for i in range(0,len(checklist)):
         str1[i] = '{'.join(checklist[i])+'}'+namelist[i] # turns the list of distinct things to a single word joined by '{' and then adds a '}' and the name
