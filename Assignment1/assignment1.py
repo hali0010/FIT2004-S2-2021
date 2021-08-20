@@ -144,13 +144,14 @@ def radixSort_lettersListOfLists(data):
     str1 = [[]] * len(checklist)
     for i in range(0,len(checklist)):
         str1[i] = '{'.join(checklist[i])+'}'+namelist[i] # turns the list of distinct things to a single word joined by '{' and then adds a '}' and the name
+        # join runs in O(M) where M is the length of the longest string. In this case, it is in a loop so it runs O(NM) since N is the number of distinct set of things and M is the length of the longest string
     str1 = radixSort_letters_aux(str1)
     for j in range(0,len(str1)):
         line = str1[j]
-        temp = line.split('}')
-        namelist[j] = temp[1]
-        checklist[j] = temp[0].split('{')
-    data2 = list(zip(namelist, checklist))
+        temp = line.split('}') # checks string for "}" delimiter because we added the name after '}'
+        namelist[j] = temp[1] # seperates the name from the concatenated string
+        checklist[j] = temp[0].split('{') # seperates each words in distinct liked set 
+    data2 = list(zip(namelist, checklist)) # repacks into a tuple because its easier to return/ handle pointers
     return data2
 
 
@@ -184,7 +185,7 @@ def binary_search(arr, x): # runs in O(logn) where n is the number of elements i
 
 def interest_groups(data):  # takes data as parameters. contains the names and each distinct set of liked things 
     pos = -1  
-    data3 = radixSort_lettersListOfLists(data)
+    data3 = radixSort_lettersListOfLists(data) # runs in O(NM)
     namelist = [ i for i, j in data3 ]  # the list that contains the names of the people
     checklist = [ j for i, j in data3 ]  # the list that contains the distinct set of liked things
     output = [[ ] * len(namelist)] * len(checklist)  # list to output the result
@@ -194,18 +195,18 @@ def interest_groups(data):  # takes data as parameters. contains the names and e
         if len(namelist)!=0:
             obj = checklist.pop(0)
             namepop = namelist.pop(0)
-            pos = binary_search(checklist,obj)
+            pos = binary_search(checklist,obj) # O(Nlog(M))
             output[i] = [namepop]
             while (pos!=-1)&(len(checklist)>=1) :  # checks for similiar distinct set of liked things
-                output[i] = output[i]+ [namelist.pop(pos)]  #adds the name to the output list if more than one name have same interest group. 
-                output[i]= radixSort_letters(output[i])
-                checklist.pop(pos)
-                pos = binary_search(checklist,obj)   
+                output[i] = output[i]+ [namelist.pop(pos)]  #adds the name to the output list if more than one name have same interest group and removes it from the names available 
+                output[i]= radixSort_letters(output[i]) # O(NlogM)
+                checklist.pop(pos) # removes the distinct set found after looking it up so we dont add it again
+                pos = binary_search(checklist,obj)   # O(NlogM)
         i=i + 1
 
     for j in range(len(output)-1,-1,-1): # cleans up the empty [] at the end
         if output[j] == []:
             output.pop(j)
 
-    return output # time complexity approximately O(N*log(M)) where N is the number of elements in the data (the number of people) and M is the length of the longest string in set
+    return output # time complexity approximately O(NM) where N is the number of elements in the data (the number of people) and M is the length of the longest string in set
 
