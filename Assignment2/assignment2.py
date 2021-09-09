@@ -44,7 +44,7 @@ def best_lamp_allocation(num_p , num_l,probs):
                 memo_greenhouse[plants][lamps] = maxP # we update the memo to include the new maximum probability for memo[plants][lamps]
             else: # this runs if we have no lamps to use i.e lamps = 0
                 memo_greenhouse[plants][lamps] = probs[plants][lamps]*memo_greenhouse[plants -1][lamps] # sets the memo[plants][lamps] to probs[plants][lamps]*memo[plants -1][0] because we have 0 number of lamps available to use
-    # function best_lamp_allocation runs in O(PL^2).
+    # function best_lamp_allocation runs in O(PL^2). where P is the number of plants(num_p) L is the number of lamps(num_l)
     # function best_lamp_allocation takes in 3 arguments. num_p where num_p is the total number of plants, num_l where num_l is the number of lamps we can use including 0 lamps, and 
     # probs that is a list of list containing all the probabilities such that probs[i][j] represents probability plant[i] will have when lamp[j] is used on it
     return memo_greenhouse[num_p-1][num_l] # best_lamp_allocation returns the maximum probability you can get when using num_l lamps for num_p plants
