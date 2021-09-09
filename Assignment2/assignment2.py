@@ -2,30 +2,23 @@
 # Student ID: 31371337 
 
 # Task 1 Game Master
-# count_aux has been modified from https://www.reddit.com/r/learnprogramming/
-def count_aux(monster_difficulties, goal):
-    memo_monster_diff = [[monster_dif] for monster_dif in monster_difficulties] # a memo array to store the monster difficulties
-    arr = [] # an empty array for helping with managing the memo array
-    final_memo = []
-    count = 0
-    while memo_monster_diff:
-        for existing_monster_difficulties in memo_monster_diff:
-            sum_to_include_monster_diff = sum(existing_monster_difficulties) # adds the similiar difficulties together for example adds the difficulty of (2) and (3) along with the difficulty of (5)
-            for monster_dif in monster_difficulties:
-                if monster_dif >= existing_monster_difficulties[-1]:
-                    if sum_to_include_monster_diff + monster_dif < goal:
-                        arr.append(existing_monster_difficulties + [monster_dif])
-                    elif sum_to_include_monster_diff + monster_dif == goal:
-                        final_memo.append(existing_monster_difficulties + [monster_dif])
-        memo_monster_diff = arr
-        arr = []
-    for i in range(0,len(final_memo)):
-        count = count +1
-    return count
 
 def count_encounters(target_difficulty,monster_list):
     monster_difficulties = [ j for i, j in monster_list]
-    return count_aux(monster_difficulties,target_difficulty)
+    memo_monster = [[0] * (target_difficulty + 1) for x in range(len(monster_difficulties) + 1)] # memo for storing all the number of different sets of 'x' monsters for 0...target_difficulties
+
+    for monsters in range(0,len(monster_difficulties)+1):
+        memo_monster[monsters][0] = 1  # theres a way to get 0 difficulty (by choosing none of the monsters).
+    
+    for i in range(1, len(monster_difficulties) + 1): # the subproblem for this problem is that memo[monster][difficulty] = memo[monster -1][difficulty] + memo[monster][difficulty - prev difficulty](since we need to take the remaining amount into account as well)
+        for j in range(1, target_difficulty + 1):
+            if monster_difficulties[i - 1] > j:  # Cannot pick the highest coin:
+                memo_monster[i][j] = memo_monster[i - 1][j] 
+            else:  # Pick the highest coin:
+                memo_monster[i][j] = memo_monster[i - 1][j] + memo_monster[i][j - monster_difficulties[i - 1]] 
+    # function count_encounters runs in O(DM) where M is the number of monsters(length of monster_list) and D is the target difficulty
+    # function count_encounters takes in 2 arguments. target_difficulty that is the total target difficulty to find and monster_list which is a list of tuples consisting of the type of monster and the difficulty of that monster
+    return memo_monster[len(monster_difficulties)][target_difficulty] # count_encounters will return the number of different sets of monsters whose difficulties sum to target_difficulty
 
 # Task 2 Greenhouse
 
@@ -48,8 +41,5 @@ def best_lamp_allocation(num_p , num_l,probs):
     # function best_lamp_allocation takes in 3 arguments. num_p where num_p is the total number of plants, num_l where num_l is the number of lamps we can use including 0 lamps, and 
     # probs that is a list of list containing all the probabilities such that probs[i][j] represents probability plant[i] will have when lamp[j] is used on it
     return memo_greenhouse[num_p-1][num_l] # best_lamp_allocation returns the maximum probability you can get when using num_l lamps for num_p plants
-
-
-
 
 
